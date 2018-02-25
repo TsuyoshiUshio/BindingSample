@@ -2,6 +2,9 @@
 
 For my learning, I implement the Kubernetes bindings for Azure Functions. 
 
+This trigger find the wrong state of the pods. The condition is the pod is Pending for 5 min.
+Then trigged this function.  
+
 # Configuration
 
 ## JobHostSample
