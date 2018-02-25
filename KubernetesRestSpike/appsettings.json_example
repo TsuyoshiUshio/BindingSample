@@ -1,0 +1,4 @@
+{
+    "kubernetesToken": "YOUR_KUBERNETES_TOKEN_HERE",
+    "serverUrl": "YOUR_SERVER_URL_HERE"
+}
