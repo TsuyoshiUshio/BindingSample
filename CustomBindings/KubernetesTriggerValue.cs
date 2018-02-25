@@ -6,5 +6,6 @@ namespace KubernetesBindings
 {
     public class KubernetesTriggerValue
     {
+        public string Result { get; set; }
     }
 }

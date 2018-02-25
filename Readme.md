@@ -15,6 +15,10 @@ Set the Environemnt Variables on your Visual Studio. Then start Storage Emulator
 |AzureWebJobsEnv|Development|
 |AzureWebJobsStorage|UseDevelopmentStorage=true
 |AzureWebJobsDashboard|UseDevelopmentStorage=true|
+|kubernetesToken| YOUR_KUBERNETES_TOKEN |
+|serverUrl| YOUR_SERVER_URL |
+
+NOTE: Please refer the following section to get the kubernetesToken and serverUrl
 
 Hit the JobSample then it start WebJobs. 
 

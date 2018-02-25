@@ -4,9 +4,11 @@ using Microsoft.Azure.WebJobs.Host.Executors;
 using Microsoft.Azure.WebJobs.Host.Listeners;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.Azure.WebJobs.Host.Triggers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -73,7 +75,7 @@ namespace KubernetesBindings
 
             public Task<IListener> CreateListenerAsync(ListenerFactoryContext context)
             {
-                return Task.FromResult<IListener>(new Listener(context.Executor));
+                return Task.FromResult<IListener>(new Listener(context.Executor, _parameter.GetCustomAttribute<KubernetesTriggerAttribute>(false)));
             }
 
             public ParameterDescriptor ToParameterDescriptor()
@@ -119,11 +121,18 @@ namespace KubernetesBindings
         private class Listener : IListener
         {
             private ITriggeredFunctionExecutor _executor;
+            private KubernetesTriggerAttribute _attribute;
+            private System.Timers.Timer _timer;
 
-            public Listener(ITriggeredFunctionExecutor executor)
+            public Listener(ITriggeredFunctionExecutor executor, KubernetesTriggerAttribute attribute)
             {
                 _executor = executor;
-                
+                _attribute = attribute;
+                _timer = new System.Timers.Timer(5 * 1000)
+                {
+                    AutoReset = true
+                };
+                _timer.Elapsed += OnTimer;
             }
 
             public void Cancel()
@@ -134,19 +143,71 @@ namespace KubernetesBindings
             public void Dispose()
             {
                 // Do some clean up
+                _timer.Dispose();
             }
 
             public Task StartAsync(CancellationToken cancellationToken)
             {
                 // TODO: Start monitoring your event source. 
+                _timer.Start();
 
+                
                 return Task.FromResult(true);
             }
 
             public Task StopAsync(CancellationToken cancellationToken)
             {
                 // TODO: Stop monitoring your event source
+                _timer.Stop();
                 return Task.FromResult(true);
+            }
+
+            private static HttpClient client;
+
+            static Listener()
+            {
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPlicyErrors) => true;
+                client = new HttpClient(httpClientHandler);
+                client.BaseAddress = new Uri(System.Environment.GetEnvironmentVariable("serverUrl"));
+            }
+
+            private async void OnTimer(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                // Call Kubernetes REST API
+                
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", System.Environment.GetEnvironmentVariable("kubernetesToken"));
+                var response = await client.GetAsync("/api/v1/namespaces/default/pods");
+                var result = await response.Content.ReadAsStringAsync();
+                var resultOject = JsonConvert.DeserializeObject<Rootobject>(result);
+
+                bool hasWrongPod = false;
+                foreach (var item in resultOject.items)
+                {
+                    var ts = DateTime.UtcNow - item.status.startTime;
+                    if ("Pending" == item.status.phase || ts.TotalMinutes > 5)
+                    {
+                        Console.WriteLine("**** Wrong Pod Detected ****");
+                        hasWrongPod = true;
+                    }
+                    Console.WriteLine($"Pod: {item.metadata.name}");
+                    Console.WriteLine($"Status: {item.status.phase}");
+                    Console.WriteLine($"Started {ts.TotalMinutes} min before");
+                }
+                // Get to know if it is wrong Pod
+                if (hasWrongPod) {
+                    // Trigger the function.
+                    var triggerValue = new KubernetesTriggerValue();
+                    triggerValue.Result = result;
+                    TriggeredFunctionData input = new TriggeredFunctionData
+                    {
+
+                        TriggerValue = triggerValue
+                    };
+                    await _executor.TryExecuteAsync(input, CancellationToken.None);
+                }
+
             }
         }
 

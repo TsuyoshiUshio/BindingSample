@@ -6,9 +6,11 @@ namespace KubernetesBindings
     public class KubernetesTriggerAttribute : Attribute
     {
         public string Token { get; private set; }
-        public KubernetesTriggerAttribute(string token)
+        public int PendingTimeLimit { get; private set; }
+        public KubernetesTriggerAttribute(string token, int pendingTimeLimit)
         {
             Token = token;
+            PendingTimeLimit = pendingTimeLimit;
         }
     }
 }

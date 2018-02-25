@@ -61,9 +61,10 @@ namespace JobHostSample
 
     public static class KubernetesSamples
     {
-        public static void KubernetesTrigger([KubernetesTrigger("")] KubernetesTriggerValue value)
+        public static void KubernetesTrigger([KubernetesTrigger("KubernetesToken", 5)] KubernetesTriggerValue value)
         {
-            Console.WriteLine("Kubernetes Trigger job called!");
+            Console.WriteLine("**** Something Wrong with your Pods. *** ");
+            // Console.WriteLine(value.Result);
         }
     }
 }

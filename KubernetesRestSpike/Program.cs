@@ -29,7 +29,7 @@ namespace KubernetesRestSpike
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Console.WriteLine("E:" + System.Environment.GetEnvironmentVariable("serverUrl"));
+            Console.WriteLine("E:" + System.Environment.GetEnvironmentVariable("serverUrl")); // it doesn't work.
             Console.WriteLine("C:" + Configuration["serverUrl"]);
 
             RunAsync().GetAwaiter().GetResult();
