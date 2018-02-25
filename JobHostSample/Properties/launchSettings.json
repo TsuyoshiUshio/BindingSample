@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "JobHostSample": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AzureWebJobsEnv": "Development",
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
+      }
+    }
+  }
+}
