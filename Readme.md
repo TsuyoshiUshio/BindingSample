@@ -7,7 +7,7 @@ Then trigged this function.
 
 # Configuration
 
-## JobHostSample
+## JobHostSample (WebJobs)
 
 JobHostSample is WebJobs local environment.
 
@@ -24,6 +24,11 @@ Set the Environemnt Variables on your Visual Studio. Then start Storage Emulator
 NOTE: Please refer the following section to get the kubernetesToken and serverUrl
 
 Hit the JobSample then it start WebJobs. 
+
+## KubernetesBindingsSample (Azure Functions)
+
+Set the same Configuration to the `local.settings.json` as the JobHostSample
+
 
 ## KubernetesRestSpike
 

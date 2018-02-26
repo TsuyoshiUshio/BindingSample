@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using KubernetesBindings;
+using Microsoft.Azure.WebJobs.Host;
 
 namespace Microsoft.Azure.WebJobs
 {
@@ -20,14 +21,19 @@ namespace Microsoft.Azure.WebJobs
             config.RegisterExtensionConfigProvider(new KubernetesExtensionConfig());
         }
 
-        private class KubernetesExtensionConfig : IExtensionConfigProvider
+        public class KubernetesExtensionConfig : IExtensionConfigProvider
         {
+            private TraceWriter _tracer;
             public void Initialize(ExtensionConfigContext context)
             {
                 if (context == null)
                 {
                     throw new ArgumentNullException("context");
                 }
+                if (context.Trace == null)
+                    throw new ArgumentNullException("context.Trace");
+
+                _tracer = context.Trace;
                 // Register our extension bindings providers
                 context.Config.RegisterBindingExtensions(
                     new KubernetesTriggerAttributeBindingProvider());

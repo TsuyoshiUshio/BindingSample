@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KubernetesBindings", "Custo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHostSample", "JobHostSample\JobHostSample.csproj", "{D7409B24-0BBD-44EB-9C49-4ADE24EDB0EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KubernetesRestSpike", "KubernetesRestSpike\KubernetesRestSpike.csproj", "{2C7987B0-46AC-4817-849F-FEF7C92F4664}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KubernetesRestSpike", "KubernetesRestSpike\KubernetesRestSpike.csproj", "{2C7987B0-46AC-4817-849F-FEF7C92F4664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

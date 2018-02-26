@@ -4,7 +4,10 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.6" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CustomBindings\KubernetesBindings.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
