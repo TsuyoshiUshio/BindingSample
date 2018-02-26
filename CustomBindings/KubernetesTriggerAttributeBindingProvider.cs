@@ -170,6 +170,7 @@ namespace KubernetesBindings
                 httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPlicyErrors) => true;
                 client = new HttpClient(httpClientHandler);
                 client.BaseAddress = new Uri(System.Environment.GetEnvironmentVariable("serverUrl"));
+
             }
 
             private async void OnTimer(object sender, System.Timers.ElapsedEventArgs e)
@@ -177,7 +178,7 @@ namespace KubernetesBindings
                 // Call Kubernetes REST API
                 
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", System.Environment.GetEnvironmentVariable("kubernetesToken"));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", this._attribute.Token);
                 var response = await client.GetAsync("/api/v1/namespaces/default/pods");
                 var result = await response.Content.ReadAsStringAsync();
                 var resultOject = JsonConvert.DeserializeObject<Rootobject>(result);

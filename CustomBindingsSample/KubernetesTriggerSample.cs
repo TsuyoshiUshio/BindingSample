@@ -13,7 +13,7 @@ namespace KubernetesBindingsSample
     public static class KubernetesTriggerSample
     {
         [FunctionName("KubernetesTriggerSample")]
-        public static void Run([KubernetesTrigger("KubernetesToken", 5)] KubernetesTriggerValue value, TraceWriter log)
+        public static void Run([KubernetesTrigger] KubernetesTriggerValue value, TraceWriter log)
         {
             log.Info("**** Something Wrong with your Pods. *** ");
             // Console.WriteLine(value.Result);

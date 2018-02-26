@@ -8,7 +8,7 @@ using Microsoft.Azure.WebJobs.Host;
 
 namespace Microsoft.Azure.WebJobs
 {
-    public static class KubernetesJobHostConfigrationExtensions
+    public static class KubernetesConfigrationExtensions
     {
         public static void KubernetesSample(this JobHostConfiguration config)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs.Description;
+﻿using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Description;
 using System;
 
 namespace KubernetesBindings
@@ -7,12 +8,15 @@ namespace KubernetesBindings
     [Binding]
     public class KubernetesTriggerAttribute : Attribute
     {
-        public string Token { get; private set; }
-        public int PendingTimeLimit { get; private set; }
-        public KubernetesTriggerAttribute(string token, int pendingTimeLimit)
+        
+        public string Token { get; set; }
+
+        public int PendingTimeLimit { get; set; }
+
+        public KubernetesTriggerAttribute()
         {
-            Token = token;
-            PendingTimeLimit = pendingTimeLimit;
+            Token = System.Environment.GetEnvironmentVariable("kubernetesToken");
+            PendingTimeLimit = 5;
         }
     }
 }
